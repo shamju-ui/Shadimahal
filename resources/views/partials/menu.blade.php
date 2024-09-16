@@ -1,7 +1,13 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4" style="min-height: 917px;">
     <!-- Brand Logo -->
-    <a href="#" class="brand-link">
+    {{-- <a href="#" class="brand-link">
         <span class="brand-text font-weight-light">{{ trans('panel.site_title') }}</span>
+    </a> --}}
+    <a href="#" class="brand-link" style="background-color: #fff">
+        <div style="display: flex;">
+        <img src="{{ asset('public/logo.png') }}" alt="Site Logo" class="brand-image" style="max-height: 30px; margin-right: 10px;">
+        <span style="color:#000" class="brand-text font-weight-light">{{ trans('panel.site_title') }}</span>
+        </div>
     </a>
 
     <!-- Sidebar -->
@@ -25,7 +31,7 @@
                         </p>
                     </a>
                 </li>
-                @can('user_management_access')
+                {{-- @can('user_management_access')
                     <li class="nav-item has-treeview {{ request()->is("admin/permissions*") ? "menu-open" : "" }} {{ request()->is("admin/roles*") ? "menu-open" : "" }} {{ request()->is("admin/users*") ? "menu-open" : "" }} {{ request()->is("admin/audit-logs*") ? "menu-open" : "" }}">
                         <a class="nav-link nav-dropdown-toggle {{ request()->is("admin/permissions*") ? "active" : "" }} {{ request()->is("admin/roles*") ? "active" : "" }} {{ request()->is("admin/users*") ? "active" : "" }} {{ request()->is("admin/audit-logs*") ? "active" : "" }}" href="#">
                             <i class="fa-fw nav-icon fas fa-users">
@@ -87,10 +93,10 @@
                             @endcan
                         </ul>
                     </li>
-                @endcan
+                @endcan --}}
                 @can('hole_booking_access')
                     <li class="nav-item">
-                        <a href="{{ route("admin.hole-bookings.index") }}" class="nav-link {{ request()->is("admin/hole-bookings") || request()->is("admin/hole-bookings/*") ? "active" : "" }}">
+                        <a href="{{ route("admin.hall-bookings.index") }}" class="nav-link {{ request()->is("admin/hall-bookings") || request()->is("admin/hall-bookings/*") ? "active" : "" }}">
                             <i class="fa-fw nav-icon fas fa-book">
 
                             </i>
@@ -112,7 +118,52 @@
                         </a>
                     </li>
                 @endcan
-                @can('booing_date_time_access')
+                    @can('new_booking_access')
+                    <li class="nav-item">
+                        <a href="{{ route("admin.cancellations.index") }}" class="nav-link {{ request()->is("admin/cancellations") || request()->is("admin/cancellations/*") ? "active" : "" }}">
+                            <i class="fa-fw nav-icon fas fa-book">
+
+                            </i>
+                            <p>
+                              Cancellations
+                            </p>
+                        </a>
+                    </li>
+                @endcan
+
+                @can('new_booking_access')
+                    <li class="nav-item">
+                        <a href="{{ route('admin.courses.index') }}" class="nav-link {{ request()->is("admin/courses") || request()->is("admin/courses/*") ? "active" : "" }}">
+                            <i class="fa-fw nav-icon fas fa-book">
+
+                            </i>
+                            <p>
+                              Courses
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('admin.streams.index') }}" class="nav-link {{ request()->is("admin/streams") || request()->is("admin/streams/*") ? "active" : "" }}">
+                            <i class="fa-fw nav-icon fas fa-book">
+
+                            </i>
+                            <p>
+                              Streams
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('admin.students.index') }}" class="nav-link {{ request()->is("admin/students") || request()->is("admin/cancellations/*") ? "active" : "" }}">
+                            <i class="fa-fw nav-icon fas fa-book">
+
+                            </i>
+                            <p>
+                              Student Reg
+                            </p>
+                        </a>
+                    </li>
+                @endcan
+                {{-- @can('booing_date_time_access')
                     <li class="nav-item">
                         <a href="{{ route("admin.booing-date-times.index") }}" class="nav-link {{ request()->is("admin/booing-date-times") || request()->is("admin/booing-date-times/*") ? "active" : "" }}">
                             <i class="fa-fw nav-icon fas fa-cogs">
@@ -135,7 +186,7 @@
                             </p>
                         </a>
                     </li>
-                @endcan
+                @endcan --}}
                 @if(file_exists(app_path('Http/Controllers/Auth/ChangePasswordController.php')))
                     @can('profile_password_edit')
                         <li class="nav-item">

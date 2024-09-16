@@ -10,9 +10,15 @@
     </div>
     <div class="card">
         <div class="card-body login-card-body">
-            <p class="login-box-msg">
-                {{ trans('global.login') }}
-            </p>
+            {{-- <p class="login-box-msg"> --}}
+                <a href="#" class="brand-link" style="background-color: #fff">
+                    <div style="display: flex; justify-content: center">
+                    <img src="{{ asset('public/logo.png') }}" alt="Site Logo" class="brand-image" style="max-height: 30px; margin-right: 10px;">
+
+                    </div>
+                </a>
+                {{-- {{ trans('global.login') }} --}}
+            {{-- </p> --}}
 
             @if(session()->has('message'))
                 <p class="alert alert-info">

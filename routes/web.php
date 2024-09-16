@@ -13,10 +13,36 @@ Auth::routes();
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {
     Route::get('/', 'HomeController@index')->name('home');
+    Route::get('reports/data', 'HomeController@getData')->name('reports.data');
+
+    // Route::get('admin/home/getData', 'HomeController@getData')->name('admin.home.getData');
     // Permissions
     Route::delete('permissions/destroy', 'PermissionsController@massDestroy')->name('permissions.massDestroy');
     Route::resource('permissions', 'PermissionsController');
 
+
+    Route::get('courses','CourseController@index')->name('course.index');;
+
+    
+Route::resource('students', 'StudentController');
+Route::post('students/{id}/restore', 'StudentController@restore')->name('students.restore');
+Route::delete('students/{id}/force-delete', 'StudentController@forceDelete')->name('students.forceDelete');
+Route::post('admin/students/store', [StudentController::class, 'store'])->name('admin.students.store');
+Route::delete('fee-payments/{feePayment}', [FeePaymentController::class, 'destroy'])->name('fee-payments.destroy');
+Route::resource('admin/payments', FeePaymentController::class);
+
+//course and stream
+
+    Route::resource('courses', CourseController::class);
+    Route::resource('streams', StreamController::class);
+    // Route::get('streams/{course_id}', [StreamController::class, 'getStreamsByCourse']);
+
+
+
+    // Cnacellations 
+
+    Route::get('cancellations', 'CancellationController@index')->name('cancellations.index');
+    Route::get('cancellations/data', 'CancellationController@getData')->name('cancellations.data');
     // Roles
     Route::delete('roles/destroy', 'RolesController@massDestroy')->name('roles.massDestroy');
     Route::resource('roles', 'RolesController');
@@ -26,9 +52,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('users', 'UsersController');
 
     // Hole Booking
-    Route::delete('hole-bookings/destroy', 'HoleBookingController@massDestroy')->name('hole-bookings.massDestroy');
-    Route::post('hole-bookings/search', 'HoleBookingController@search')->name('hole-bookings.search');
-    Route::resource('hole-bookings', 'HoleBookingController');
+    Route::delete('hall-bookings/destroy', 'HoleBookingController@massDestroy')->name('hole-bookings.massDestroy');
+    Route::post('hall-bookings/search', 'HoleBookingController@search')->name('hall-bookings.search');
+    Route::resource('hall-bookings', 'HoleBookingController');
 
     // Audit Logs
     Route::resource('audit-logs', 'AuditLogsController', ['except' => ['create', 'store', 'edit', 'update', 'destroy']]);
@@ -56,3 +82,5 @@ Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 
         Route::post('profile/destroy', 'ChangePasswordController@destroy')->name('password.destroyProfile');
     }
 });
+
+

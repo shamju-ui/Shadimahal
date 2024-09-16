@@ -20,10 +20,19 @@
     <link href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.css" rel="stylesheet" />
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+
     @yield('styles')
 </head>
 
 <body class="sidebar-mini layout-fixed" style="height: auto;">
+    @if (session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+    @endif
     <div class="wrapper">
         <nav class="main-header navbar navbar-expand bg-white navbar-light border-bottom">
             <!-- Left navbar links -->
@@ -86,7 +95,7 @@
             {{ csrf_field() }}
         </form>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+ 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.full.min.js"></script>
@@ -99,8 +108,8 @@
     <script src="https://cdn.datatables.net/buttons/1.2.4/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.2.4/js/buttons.print.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.2.4/js/buttons.colVis.min.js"></script>
-    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
-    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+    {{-- <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script> --}}
     <script src="//cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/16.0.0/classic/ckeditor.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
@@ -126,15 +135,17 @@
     language: {
       url: languages['{{ app()->getLocale() }}']
     },
-    columnDefs: [{
-        orderable: false,
-        className: 'select-checkbox',
-        targets: 0
-    }, {
-        orderable: false,
-        searchable: false,
-        targets: -1
-    }],
+    // columnDefs: [{
+    //     orderable: false,
+    //     className: 'select-checkbox',
+    //     targets: 0
+    // },
+    
+    // {
+    //     orderable: false,
+    //     searchable: false,
+    //     targets: -1
+    // },
     select: {
       style:    'multi+shift',
       selector: 'td:first-child'
@@ -144,35 +155,35 @@
     pageLength: 100,
     dom: 'lBfrtip<"actions">',
     buttons: [
-      {
-        extend: 'selectAll',
-        className: 'btn-primary',
-        text: selectAllButtonTrans,
-        exportOptions: {
-          columns: ':visible'
-        },
-        action: function(e, dt) {
-          e.preventDefault()
-          dt.rows().deselect();
-          dt.rows({ search: 'applied' }).select();
-        }
-      },
-      {
-        extend: 'selectNone',
-        className: 'btn-primary',
-        text: selectNoneButtonTrans,
-        exportOptions: {
-          columns: ':visible'
-        }
-      },
-      {
-        extend: 'copy',
-        className: 'btn-default',
-        text: copyButtonTrans,
-        exportOptions: {
-          columns: ':visible'
-        }
-      },
+    //   {
+    //     extend: 'selectAll',
+    //     className: 'btn-primary',
+    //     text: selectAllButtonTrans,
+    //     exportOptions: {
+    //       columns: ':visible'
+    //     },
+    //     action: function(e, dt) {
+    //       e.preventDefault()
+    //       dt.rows().deselect();
+    //       dt.rows({ search: 'applied' }).select();
+    //     }
+    //   },
+    //   {
+    //     extend: 'selectNone',
+    //     className: 'btn-primary',
+    //     text: selectNoneButtonTrans,
+    //     exportOptions: {
+    //       columns: ':visible'
+    //     }
+    //   },
+    //   {
+    //     extend: 'copy',
+    //     className: 'btn-default',
+    //     text: copyButtonTrans,
+    //     exportOptions: {
+    //       columns: ':visible'
+    //     }
+    //   },
       {
         extend: 'csv',
         className: 'btn-default',
@@ -205,14 +216,14 @@
           columns: ':visible'
         }
       },
-      {
-        extend: 'colvis',
-        className: 'btn-default',
-        text: colvisButtonTrans,
-        exportOptions: {
-          columns: ':visible'
-        }
-      }
+    //   {
+    //     extend: 'colvis',
+    //     className: 'btn-default',
+    //     text: colvisButtonTrans,
+    //     exportOptions: {
+    //       columns: ':visible'
+    //     }
+    //   }
     ]
   });
 

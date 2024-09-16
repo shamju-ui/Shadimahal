@@ -6,10 +6,10 @@ use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 class BookingPayment extends Model
 {
-    use SoftDeletes, HasFactory;
+    use SoftDeletes, HasFactory,HasUuids;
 
     public $table = 'booking_payments';
 
@@ -17,6 +17,8 @@ class BookingPayment extends Model
         'created_at',
         'updated_at',
         'deleted_at',
+        'date_1',
+        
     ];
 
     protected $fillable = [
@@ -26,6 +28,9 @@ class BookingPayment extends Model
         'created_at',
         'updated_at',
         'deleted_at',
+        'receipt',
+        'date_1',
+        'date_2',
     ];
 
     public const AMOUNT_TYPE_SELECT = [

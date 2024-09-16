@@ -17,13 +17,13 @@ class UpdateHoleBookingRequest extends FormRequest
     public function rules()
     {
         return [
-            'date' => [
-                'required',
-                'date_format:' . config('panel.date_format'),
-            ],
-            'time_slot' => [
-                'required',
-            ],
+            // 'date' => [
+            //     'required',
+            //     'date_format:' . config('panel.date_format'),
+            // ],
+            // 'time_slot' => [
+            //     'required',
+            // ],
             'name' => [
                 'string',
                 'required',
@@ -39,10 +39,10 @@ class UpdateHoleBookingRequest extends FormRequest
             'total_amount' => [
                 'numeric',
             ],
-            'elactric_charges' => [
-                'string',
-                'nullable',
-            ],
+            // 'elactric_charges' => [
+            //     'string',
+            //     'nullable',
+            // ],
             'comment' => [
                 'string',
                 'nullable',
