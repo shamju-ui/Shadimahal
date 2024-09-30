@@ -17,4 +17,8 @@ class Course extends Model
     {
         return $this->hasMany(Stream::class);
     }
+    public function seminars()
+    {
+        return $this->belongsToMany(Seminar::class, 'seminar_course', 'course_id', 'seminar_id');
+    }
 }

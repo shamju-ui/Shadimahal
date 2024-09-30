@@ -36,9 +36,11 @@ Route::resource('admin/payments', FeePaymentController::class);
     Route::resource('courses', CourseController::class);
     Route::resource('streams', StreamController::class);
     // Route::get('streams/{course_id}', [StreamController::class, 'getStreamsByCourse']);
-
-
-
+  //  Route::post('seminars/get-streams', [SeminarController::class,'getStreamsForCourses'])->name('getStreamsForCourses');
+    Route::resource('seminars', SeminarController::class);
+    Route::post('seminars/get-streams', 'SeminarController@getStreamsForCourses')->name('getStreamsForCourses');
+    Route::post('/save-attendance', 'SeminarController@saveAttendance')->name('save.attendance');
+    Route::get('/get-students/attendance/{id}', 'SeminarController@getStreamAndCourseForSeminar')->name('get.student.attendance');
     // Cnacellations 
 
     Route::get('cancellations', 'CancellationController@index')->name('cancellations.index');
