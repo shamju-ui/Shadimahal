@@ -11,7 +11,8 @@ use App\Models\Course;
 use App\Models\Stream;
 use App\Models\FeePayment;
 use App\Models\MarkList;
-
+use App\Models\Seminar;
+use App\Models\Attendance;
 class StudentController extends Controller
 {
     public function index()
@@ -192,15 +193,44 @@ if ($request->has('marklist_class_name')) {
 
     public function edit($id)
     {
-        $student = Student::with('FeePayment')->findOrFail($id);
-        $student = Student::with('markList')->findOrFail($id);
-    
+        $student = Student::with('FeePayment', 'markList')->findOrFail($id);
+       // $student = Student::with('markList')->findOrFail($id);
+        $student_streamId = $student->stream_id;
+        $student_joiningDate =$student->created_date;
         // Fetch all courses and streams to populate the dropdowns
         $courses = Course::pluck('name', 'id')->all(); // Assuming the Course model has a 'name' field
         $streams = Stream::pluck('name', 'id')->all(); // Assuming the Stream model has a 'name' field
+        $seminars = Seminar::whereHas('streams', function ($query) use ($student_streamId) {
+            $query->where('stream_id', $student_streamId);
+        })->get();
+        $attendanceData = [];
+    foreach ($seminars as $seminar) {
+        // Check if the student attended the seminar
+        $attendance = Attendance::where('student_id', $student->id)
+            ->where('seminar_id', $seminar->id)
+            ->first();
 
+        // Determine attendance status
+        if ($attendance) {
+            $status = 'present';
+        } elseif ($student_joiningDate > $seminar->date) {
+            // If the student joined after the seminar date, they are marked as absent
+            $status = 'absent (joined after seminar date)';
+        } else {
+            $status = 'absent';
+        }
+
+        // Add seminar and attendance status to the data array
+        $attendanceData[] = [
+            'seminar' => $seminar->seminar_name, // Assuming 'title' is the seminar field
+            'date' => $seminar->seminar_date,
+            'status' => $status,
+        ];
+    }
+        
+        //$student = Student::with('FeePayment', 'markList')->findOrFail($id);
         // Pass the student, courses, and streams data to the view
-        return view('admin.students.edit', compact('student', 'courses', 'streams'));
+        return view('admin.students.edit', compact('student', 'courses', 'streams','attendanceData'));
     }
 
     public function update(Request $request, Student $student)

@@ -44,8 +44,14 @@ class SeminarController extends Controller
     // Attach selected courses to the seminar
     $seminar->courses()->attach($request->course_ids);
 
-    // Attach selected streams to the seminar
+   if (empty($request->stream_ids)) {
+    // If stream_ids is empty, select all streams under the selected course_ids
+    $streams = Stream::whereIn('course_id', $request->course_ids)->pluck('id')->toArray();
+    $seminar->streams()->attach($streams);
+} else {
+    // If stream_ids are provided, attach them
     $seminar->streams()->attach($request->stream_ids);
+}
 
          // Redirect back to seminar list with a success message
          return redirect()->route('admin.seminars.index')->with('success', 'Seminar created successfully!');
@@ -209,36 +215,34 @@ public function saveAttendance(Request $request)
     ]);
 
     // Fetch all existing attendance records for the seminar
-    $existingAttendances = Attendance::where('seminar_id', $request->seminar_id)->pluck('student_id')->toArray();
+    $existingAttendances = Attendance::where('seminar_id', $request->seminar_id)->get()->keyBy('student_id');
 
     // Loop through each student ID in the form (checked students)
     foreach ($request->student_ids as $studentId) {
-        // Check if attendance record already exists
-        $attendance = Attendance::where('student_id', $studentId)
-                                ->where('seminar_id', $request->seminar_id)
-                                ->first();
-
-        if (!$attendance) {
-            // If the attendance record doesn't exist, create a new one
+        if (isset($existingAttendances[$studentId])) {
+            // If attendance exists, mark it as "present"
+            $existingAttendances[$studentId]->update(['status' => 'present']);
+        } else {
+            // If attendance doesn't exist, create a new one with "present" status
             Attendance::create([
                 'student_id' => $studentId,
                 'seminar_id' => $request->seminar_id,
                 'status' => 'present'
-                // Add other fields if needed, e.g. 'status' => 'present'
             ]);
         }
     }
 
-    // Remove attendance for students that were unchecked (not in $request->student_ids)
-    $studentsToRemove = array_diff($existingAttendances, $request->student_ids);
-    if (!empty($studentsToRemove)) {
-        Attendance::whereIn('student_id', $studentsToRemove)
+    // Mark students who are not in the request list (unchecked) as "absent"
+    $uncheckedStudents = $existingAttendances->keys()->diff($request->student_ids);
+    if ($uncheckedStudents->isNotEmpty()) {
+        Attendance::whereIn('student_id', $uncheckedStudents)
                   ->where('seminar_id', $request->seminar_id)
-                  ->delete();
+                  ->update(['status' => 'absent']);
     }
 
     return redirect()->route('admin.seminars.index')->with('success', 'Attendance Recorded successfully!');
 }
+
 
 
 }

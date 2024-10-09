@@ -322,8 +322,33 @@
                     <button type="button" class="btn btn-secondary mt-2" id="add-marklist-row">Add Mark List</button>
                 </div>
             </div>
+            
+            <div class="card mt-4">
+                <div class="card-header">
+                    Seminar List
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Seminar</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($attendanceData as $data)
+                                <tr>
+                                    <td>{{ $data['seminar'] }}</td>
+                                    <td>{{ $data['date'] }}</td>
+                                    <td>{{ $data['status'] }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
 
-
+                </div>
+            </div>
             <!-- Save Button -->
             <div class="form-group text-center mt-4">
                 <button type="submit" class="btn btn-primary">Save Changes</button>
